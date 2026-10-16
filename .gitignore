@@ -1,0 +1,20 @@
+# Dependencies and local build output
+node_modules/
+dist/
+
+# Local configuration and runtime logs
+.env
+*.log
+
+# Python/editor/cache files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.vscode/
+.idea/
+
+# Generated browser profile and report QA renders
+bao-cao/work/chrome-profile/
+bao-cao/work/qa/
+bao-cao/work/qa_v2/
+bao-cao/work/reference-render/
