@@ -1,0 +1,69 @@
+{
+  "mqtt": [
+    {
+      "topic": "nha/phongkhach/nhietdo/state",
+      "payload": "29.9",
+      "retain": true,
+      "qos": 0
+    },
+    {
+      "topic": "nha/phongkhach/doam/state",
+      "payload": "83",
+      "retain": true,
+      "qos": 0
+    },
+    {
+      "topic": "nha/phongkhach/chuyendong/state",
+      "payload": "OFF",
+      "retain": true,
+      "qos": 0
+    },
+    {
+      "topic": "nha/phongkhach/anhsang/state",
+      "payload": "OFF",
+      "retain": true,
+      "qos": 0
+    },
+    {
+      "topic": "nha/phongkhach/relay/state",
+      "payload": "OFF",
+      "retain": true,
+      "qos": 0
+    },
+    {
+      "topic": "nha/phongkhach/den/state",
+      "payload": "OFF",
+      "retain": true,
+      "qos": 0
+    },
+    {
+      "topic": "nha/phongkhach/coi/state",
+      "payload": "OFF",
+      "retain": true,
+      "qos": 0
+    },
+    {
+      "topic": "nha/phongkhach/thucong/state",
+      "payload": "ON",
+      "retain": true,
+      "qos": 0
+    }
+  ],
+  "ws": {
+    "connected": true
+  },
+  "chatbot": {
+    "status": 500,
+    "elapsed_ms": 10698,
+    "data": {
+      "error": "Ollama không phản hồi - kiểm tra service có đang chạy không"
+    }
+  },
+  "chatbot_retry": {
+    "status": 200,
+    "elapsed_ms": 19229,
+    "data": {
+      "tra_loi": "The current temperature is 29.9°C, and the humidity is at 83%."
+    }
+  }
+}

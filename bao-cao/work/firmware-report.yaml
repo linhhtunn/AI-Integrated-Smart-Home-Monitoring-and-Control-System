@@ -1,0 +1,115 @@
+# Cau hinh ESPHome dua tren phien ban nhom cung cap
+# Thong tin xac thuc duoc tach sang secrets.yaml
+esphome:
+  name: cam-bien-phong-khach
+  friendly_name: cam-bien-phong-khach
+esp32:
+  variant: esp32
+  framework:
+    type: esp-idf
+logger:
+mqtt:
+  broker: 192.168.0.102
+  port: 1883
+  discovery: false
+  password: !secret mqtt_password
+api:
+  encryption:
+    key: !secret api_encryption_key
+ota:
+  - platform: esphome
+    password: !secret ota_password
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: cam-bien-phong- Fallback Hotspot
+    password: !secret fallback_ap_password
+captive_portal:
+globals:
+  - id: che_do_thu_cong
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+sensor:
+  - platform: dht
+    id: sensor_dht_1
+    pin: GPIO4
+    humidity:
+      name: Độ ẩm phòng
+      id: sensor_dht_1_humidity
+      state_topic: nha/phongkhach/doam/state
+    temperature:
+      name: Nhiệt độ phòng
+      id: sensor_dht_1_temperature
+      state_topic: nha/phongkhach/nhietdo/state
+    model: DHT11
+binary_sensor:
+  - platform: gpio
+    name: Chuyển động phòng khách
+    id: binary_sensor_gpio_1
+    pin: GPIO27
+    state_topic: nha/phongkhach/chuyendong/state
+    on_press:
+      then:
+        - if:
+            condition:
+              lambda: 'return !id(che_do_thu_cong);'
+            then:
+              - switch.turn_on: den_led_chuyendong
+              - switch.turn_on: chuong_cua
+              - delay: 500ms
+              - switch.turn_off: chuong_cua
+              - if:
+                  condition:
+                    binary_sensor.is_on: binary_sensor_gpio_2
+                  then:
+                    - switch.turn_on: switch_gpio_1
+    on_release:
+      then:
+        - if:
+            condition:
+              lambda: 'return !id(che_do_thu_cong);'
+            then:
+              - switch.turn_off: den_led_chuyendong
+              - switch.turn_off: switch_gpio_1
+  - platform: gpio
+    name: Ánh sáng phòng khách
+    id: binary_sensor_gpio_2
+    pin: GPIO34
+    state_topic: nha/phongkhach/anhsang/state
+switch:
+  - platform: gpio
+    name: Đèn LED chuyển động
+    id: den_led_chuyendong
+    pin: GPIO25
+    state_topic: nha/phongkhach/den/state
+    command_topic: nha/phongkhach/den/set
+  - platform: gpio
+    name: Relay phòng khách
+    id: switch_gpio_1
+    state_topic: nha/phongkhach/relay/state
+    command_topic: nha/phongkhach/relay/set
+    pin:
+      number: GPIO26
+      inverted: true
+  - platform: gpio
+    name: Chuông cửa
+    id: chuong_cua
+    pin: GPIO33
+    state_topic: nha/phongkhach/coi/state
+    command_topic: nha/phongkhach/coi/set
+  - platform: template
+    name: Chế độ thủ công
+    id: cong_tac_thu_cong
+    optimistic: true
+    state_topic: nha/phongkhach/thucong/state
+    command_topic: nha/phongkhach/thucong/set
+    turn_on_action:
+      - globals.set:
+          id: che_do_thu_cong
+          value: 'true'
+    turn_off_action:
+      - globals.set:
+          id: che_do_thu_cong
+          value: 'false'
